@@ -52,7 +52,13 @@ menu = {
 
 # 1. Set up order list. Order list will store a list of dictionaries for
 # menu item name, item price, and quantity ordered
-
+order_list = [
+    {
+        "Item name": "",
+        "Price": 0,
+        "Quantity": 0
+    }
+]
 
 # Launch the store and present a greeting to the customer
 print("Welcome to the variety food truck.")
@@ -67,58 +73,77 @@ while place_order:
     # Create a variable for the menu item number
     i = 1
     # Create a dictionary to store the menu for later retrieval
-    menu_items = {}
+    menu_item_names_by_number = {}
 
     # Print the options to choose from menu headings (all the first level
     # dictionary items in menu).
+    
+    # STEP 1: Print Categories:
+    #_________________________
     for key in menu.keys():
         print(f"{i}: {key}")
-        # Store the menu category associated with its menu item number
-        menu_items[i] = key
+        # Store the menu category name as the value of the menu item number key
+        menu_item_names_by_number[i] = key
         # Add 1 to the menu item number
         i += 1
 
-    # Get the customer's input
-    menu_category = input("Type menu number: ")
+    # Get the customer's input as a menu_item_num number, 
+    # to be used to reference a menu category number
+    # inside menu_item_names_by_number
+    menu_item_num = input("Type menu number: ")
 
     # Check if the customer's input is a number
-    if menu_category.isdigit():
-        # Check if the customer's input is a valid option
-        if int(menu_category) in menu_items.keys():
+    if menu_item_num.isdigit():
+        # Check if customer's input is in menu_item_names_by_number
+        if int(menu_item_num) in menu_item_names_by_number.keys():
             # Save the menu category name to a variable
-            menu_category_name = menu_items[int(menu_category)]
+            menu_category_name = menu_item_names_by_number[int(menu_item_num)]
             # Print out the menu category name they selected
             print(f"You selected {menu_category_name}")
 
             # Print out the menu options from the menu_category_name
             print(f"What {menu_category_name} item would you like to order?")
             i = 1
-            menu_items = {}
+            menu_item_names_by_number = {}
             print("Item # | Item name                | Price")
             print("-------|--------------------------|-------")
-            for key, value in menu[menu_category_name].items():
-                # Check if the menu item is a dictionary to handle differently
-                if type(value) is dict:
-                    for key2, value2 in value.items():
-                        num_item_spaces = 24 - len(key + key2) - 3
+            # For the menu_category_name the user selected (Snacks, Meals, etc.)
+            # loop through each item, key for the specific item and display 
+            # the item number, item name, and price
+            
+            for menu_subitem_key, menu_subitem_value in menu[menu_category_name].items():
+                # print(f"menu_subitem_key: {menu_subitem_key}")
+                # Check if the submenu item is also a dictionary, which would be handled differently
+                # Step 2a: Check if sub-items is also a dictionary:
+                #_____________________________
+                
+                if type(menu_subitem_value) is dict:
+                    for sub_item_key, sub_item_value in menu_subitem_value.items():
+                        combined_length = menu_subitem_key + sub_item_key;
+                        seperator_space = 3 #  space-dash-space " - " between the main item and sub-item names.
+                        num_item_spaces = 24 - len(combined_length) - seperator_space
                         item_spaces = " " * num_item_spaces
-                        print(f"{i}      | {key} - {key2}{item_spaces} | ${value2}")
-                        menu_items[i] = {
-                            "Item name": key + " - " + key2,
-                            "Price": value2
+                        print(f"{i}      | {menu_subitem_key} - {sub_item_key}{item_spaces} | ${sub_item_value}")
+                        # Store the item in a dictionary (object) to be printed
+                        menu_item_names_by_number[i] = {
+                            "Item name": key + " - " + sub_item_key,
+                            "Price": sub_item_value
                         }
                         i += 1
+                # Step 2b: Print the Sub items:
+                #_____________________________
+                 
                 else:
-                    num_item_spaces = 24 - len(key)
+                    num_item_spaces = 24 - len(menu_subitem_key)
                     item_spaces = " " * num_item_spaces
-                    print(f"{i}      | {key}{item_spaces} | ${value}")
-                    menu_items[i] = {
-                        "Item name": key,
-                        "Price": value
+                    print(f"{i}      | {menu_subitem_key}{item_spaces} | ${menu_subitem_value}")
+                    menu_item_names_by_number[i] = {
+                        "Item name": menu_subitem_key,
+                        "Price": menu_subitem_value
                     }
                     i += 1
             # 2. Ask customer to input menu item number
-
+            new_menu_item_num = input("*Type a new menu number: ")
 
             # 3. Check if the customer typed a number
 
@@ -146,15 +171,17 @@ while place_order:
 
         else:
             # Tell the customer they didn't select a menu option
-            print(f"{menu_category} was not a menu option.")
+            print(f"{menu_item_num} was not a menu option.")
     else:
         # Tell the customer they didn't select a number
         print("You didn't select a number.")
 
+# Part II: Do something withe the Snack Items selected
     while True:
         # Ask the customer if they would like to order anything else
+        # ___________________________________________________________
         keep_ordering = input("Would you like to keep ordering? (Y)es or (N)o ")
-
+        #____________________________________________________________
         # 5. Check the customer's input
 
                 # Keep ordering
