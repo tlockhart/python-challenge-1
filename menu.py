@@ -56,7 +56,7 @@ order = []
 
 # Launch the store and present a greeting to the customer
 print("Welcome to the variety food truck.")
-
+print("")
 # Customers may want to order multiple items, so let's create a continuous
 # loop
 # PLACE_ORDER IS THE WHILE LOOP EXIT CONDITION
@@ -85,9 +85,11 @@ while place_order:
         # Add 1 to the menu item number
         i += 1
 
+    print("")
     # Get the customer's input
     menu_category = input("Type menu number to view or q to quit: ")
-
+    print("")
+    
     # # [Optional: Exit the loop if user typed 'q']
     if menu_category == 'q':
         break
@@ -102,6 +104,7 @@ while place_order:
             # Print out the menu category name they selected
             print(f"You selected {menu_category_name}")
 
+            print("")
             # Print out the sub menu options from the menu_category_name
             print(f"What {menu_category_name} item would you like to order?")
             i = 1
@@ -129,9 +132,10 @@ while place_order:
                         "price": value
                     }
                     i += 1
+            print("")
             # 2. Ask customer to input sub menu item number
             menu_selection = input("Type menu number: ")
-
+            print("")
             # 3. Check if the customer typed a number
             if menu_selection.isdigit():
                 # Convert the menu selection to an integer
@@ -139,13 +143,13 @@ while place_order:
                 submenu_category_dict = menu_items[submenu_category_key]
                 # 4. Check if the menu selection (submenu_category_key)is in the menu items (submenu_item_keys)
                 submenu_item_keys = menu_items.keys()
-                print(f'Submenu Keys: {submenu_item_keys} Selection: {submenu_category_key} Object: {submenu_category_dict}')
+                # print(f'Submenu Keys: {submenu_item_keys} Selection: {submenu_category_key} Object: {submenu_category_dict}')
                 if submenu_category_key in submenu_item_keys:
                     # Store the item name as a variable
-                    print(f'Answer: {submenu_category_key in submenu_item_keys}')
+                    # print(f'Answer: {submenu_category_key in submenu_item_keys}')
                     submenu_category_name = submenu_category_dict["name"]
                     submenu_category_price = submenu_category_dict["price"]
-                    print(f'Submenu Category Name: {submenu_category_name}')
+                    # print(f'Submenu Category Name: {submenu_category_name}')
                     # Ask the customer for the quantity of the menu item
                     quantity = input(f"Enter a quantity for the {submenu_category_name}, or the quantity will default to 1 if invalid: ")
                     selected_item = {}
@@ -161,7 +165,7 @@ while place_order:
                     }
                     # Add the item name, price, and quantity to the order list
                     order.append(selected_item)
-                    print(f'selected_item: {selected_item} Order_list: {order}')
+                    # print(f'selected_item: {selected_item} Order_list: {order}')
 
                 # Tell the customer they didn't select a menu option
                 else:
@@ -172,10 +176,12 @@ while place_order:
     else:
         # Tell the customer they didn't select a number
         print("You didn't select a number.")
-
+    
     while True:
+        print("")
         # Ask the customer if they would like to order anything else
         keep_ordering = input("Would you like to keep ordering? (Y)es or (N)o ")
+        print("")
         # 5. Check the customer's input
         match keep_ordering.lower():
                 # Keep ordering
@@ -189,15 +195,14 @@ while place_order:
                     break
                 case _:
                     print(f'Try again because your selection was invalid')
+        print("")
 
 # Print out the customer's order
 print("This is what we are preparing for you.\n")
 
 # Uncomment the following line to check the structure of the order
-print(order)
 
 print("Item name                 | Price  | Quantity")
-print("")
 print("--------------------------|--------|----------")
 
 # 6. Loop through the items in the customer's order
@@ -219,12 +224,13 @@ for item in order:
     
     # 10. Print the item name, price, and quantity
     print(f'{item_name}{item_name_string}|{item_price}{item_price_string}|{item_quantity}')
-    print("")
 
 # 11. Calculate the cost of the order using list comprehension
 # Multiply the price by quantity for each item in the order list, then sum()
 # and print the prices.
 list_of_prices = [item['price'] * item['quantity']for item in order]
 
-print(f'Total: ${sum(list_of_prices)}')
+print("")
+
+print(f'Total: ${sum(list_of_prices):.2f}')
 # print(f'List of Prices: {list_of_prices}')
