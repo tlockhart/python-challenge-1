@@ -111,19 +111,19 @@ while place_order:
             # loop through each item, key for the specific item and display 
             # the item number, item name, and price
             
-            for menu_subitem_key, menu_subitem_value in menu[menu_category_name].items():
-                # print(f"menu_subitem_key: {menu_subitem_key}")
+            for menu_subitem_name, menu_subitem_price in menu[menu_category_name].items():
+                # print(f"menu_subitem_name: {menu_subitem_name}")
                 # Check if the submenu item is also a dictionary, which would be handled differently
-                # Step 2a: Check if sub-items is also a dictionary:
+                # Step 2a: Check if sub-items is also a dictionary: NOT GOING HERE
                 #_____________________________
                 
-                if type(menu_subitem_value) is dict:
-                    for sub_item_key, sub_item_value in menu_subitem_value.items():
-                        combined_length = menu_subitem_key + sub_item_key;
+                if type(menu_subitem_price) is dict:
+                    for sub_item_key, sub_item_value in menu_subitem_price.items():
+                        combined_length = menu_subitem_name + sub_item_key;
                         seperator_space = 3 #  space-dash-space " - " between the main item and sub-item names.
                         num_item_spaces = 24 - len(combined_length) - seperator_space
                         item_spaces = " " * num_item_spaces
-                        print(f"{i}      | {menu_subitem_key} - {sub_item_key}{item_spaces} | ${sub_item_value}")
+                        print(f"{i}      | {menu_subitem_name} - {sub_item_key}{item_spaces} | ${sub_item_value}")
                         # Store the item in a dictionary (object) to be printed
                         menu_item_names_by_number[i] = {
                             "Item name": key + " - " + sub_item_key,
@@ -134,41 +134,63 @@ while place_order:
                 #_____________________________
                  
                 else:
-                    num_item_spaces = 24 - len(menu_subitem_key)
+                    num_item_spaces = 24 - len(menu_subitem_name)
                     item_spaces = " " * num_item_spaces
-                    print(f"{i}      | {menu_subitem_key}{item_spaces} | ${menu_subitem_value}")
+                    print(f"{i}      | {menu_subitem_name}{item_spaces} | ${menu_subitem_price}")
                     menu_item_names_by_number[i] = {
-                        "Item name": menu_subitem_key,
-                        "Price": menu_subitem_value
+                        "Item name": menu_subitem_name,
+                        "Price": menu_subitem_price
                     }
                     i += 1
             # 2. Ask customer to input menu item number
-            new_menu_item_num = input("*Type a new menu number: ")
+            # menu_selection => sub_menu_selection
+            sub_menu_selection = input("Please enter a selection from the submenu: ")
 
             # 3. Check if the customer typed a number
-
+            if sub_menu_selection.isdigit():
                 # Convert the menu selection to an integer
-
+                sub_menu_selection = int(sub_menu_selection)
 
                 # 4. Check if the menu selection is in the menu items
-
+                subcategory = menu[menu_category_name]
+                print(f"Submenu item object: {subcategory}")
+                print(f"Submenu selection:", sub_menu_selection)
+                print(f"Length of subItems: {range(len(subcategory))}")
+                print(f"Submenu keys List: {list(subcategory.keys())}")
+                print(f"Submenu values List: {list(subcategory.values())}")
+                print(f"Submenu items Tuples List: {list(subcategory.items())}")
+                list_of_dicts = [{key: value} for key, value in subcategory.items()]
+                print(f"First object in list of dicts: {list_of_dicts[sub_menu_selection]}")
+                print(f"Submenu items List of Dicts: {list_of_dicts}")
+                if sub_menu_selection in range(len(subcategory)):
+                    print(True)
                     # Store the item name as a variable
-
+                    sub_item_name = list(subcategory.keys())[sub_menu_selection-1]
+                    print(f"Sub item name: {sub_item_name}")
 
                     # Ask the customer for the quantity of the menu item
 
-
-                    # Check if the quantity is a number, default to 1 if not
-
+                    sub_item_quantity = input(f"How many {sub_item_name}/s would you like? ")
+                    # Check if the quantity is a number, default to 1 if not (break condition)
+                    if sub_item_quantity.isdigit():
+                        sub_item_quantity = int(sub_item_quantity)
+                    else:
+                        sub_item_quantity = 1
 
                     # Add the item name, price, and quantity to the order list
-
+                    order_list.append({
+                        "Item name": sub_item_name,
+                        "Price": list(subcategory.values())[sub_menu_selection-1],
+                        "Quantity": sub_item_quantity
+                    })
 
                     # Tell the customer that their input isn't valid
+                    if sub_item_quantity == 1:
+                        print(f"You did not enter a number")
 
-
-                # Tell the customer they didn't select a menu option
-
+                # Tell the customer they didn't select a submenu option
+                else:
+                    print(f"{sub_menu_selection} was not a submenu option.")
         else:
             # Tell the customer they didn't select a menu option
             print(f"{menu_item_num} was not a menu option.")
